@@ -36,6 +36,7 @@ class LTC6946
     void enable();
     void disable();
     void setNdiv(uint64_t N);
+    void setOdiv(uint32_t _div);
     void writeReg(int addr, int val);
     int readReg(int addr);
 
@@ -46,6 +47,7 @@ class LTC6946
     int _Fpfd;
     uint64_t _N;
     int _divisor;
+    uint32_t _div;
     
 };
 

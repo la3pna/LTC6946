@@ -28,10 +28,8 @@ void LTC6946::setFreq(uint64_t _frequency)
        
        setRdiv(_R);
        setNdiv(_N);
-       writeReg(Reg7, 0x63); // Set ALCMON, ALCCAL, CAL, LKEN
-       delay (100); //need to wait for the PLL to do frequency cal.
-
-       writeReg(Reg8, );
+       setOdiv(_divisor);
+       
        enable();
 }
 
@@ -40,10 +38,21 @@ void LTC6946::setRdiv(uint32_t R)
    writeReg(Reg3,0x00); // set Bdiv and Rdiv_high to 0
    writeReg(Reg4, _R); //R register
   }
+
+void LTC6946::setOdiv(uint32_t _div)
+{
+       writeReg(Reg8,(0x17<<3)+(_div&0x03)); // alternative 0xB8 OR _divisor
+       writeReg(Reg9, );
+       writeReg(RegA,);
+  }
+  
 void LTC6946::setNdiv(uint64_t N)
 {
        writeReg(Reg5,(_N>>8)&&0xFF); Get the high part of _N
        writeReg(Reg6, N&0xFF); //Need to & 0xFF to get 8 bits...
+       writeReg(Reg7, 0x63); // Set ALCMON, ALCCAL, CAL, LKEN
+       delay (10); //need to wait for the PLL to do frequency cal.
+
   }
 
 bool LTC6946::isLocked()
